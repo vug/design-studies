@@ -1,12 +1,6 @@
-import pytest
-from http.request import Request
-
-
-def test_raises():
-    with pytest.raises(ZeroDivisionError):
-        1 / 0
+from httprotocol.http import Request
 
 
 def test_params():
     r = Request("foo")
-    r
+    assert r is not None
