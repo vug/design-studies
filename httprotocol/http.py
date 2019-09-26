@@ -1,5 +1,7 @@
+import json
 from typing import Any
-from request import Request
+
+from .request import Request
 
 
 class HTTProtocol(object):
@@ -11,4 +13,4 @@ class HTTProtocol(object):
         pass
 
     def make_response(self, obj: Any) -> str:
-        pass
+        return json.dumps(obj)

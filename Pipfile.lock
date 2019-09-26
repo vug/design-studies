@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "d58b788b289c4c96e7c532c2feeec0d6d43c84def4f07485ab0cc2c0a27075ec"
+            "sha256": "0c574c06e46457d29e8c9c49f521ec3ce4eeb6aceee8195910560cbf7219bb8f"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -15,7 +15,12 @@
             }
         ]
     },
-    "default": {},
+    "default": {
+        "httprotocol": {
+            "editable": true,
+            "path": "."
+        }
+    },
     "develop": {
         "appdirs": {
             "hashes": [
