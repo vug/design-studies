@@ -1,7 +1,18 @@
-@startuml A History of Liking
-actor Alice
-actor Bob
+@startuml Life of a Request
+skinparam shadowing false
+actor Client
 
-Alice -> Bob: likes
-Bob -> Alice: likes
+Client -> Server: sends request message
+Server -> HTTP: gives request
+HTTP -> HTTP: parses request string\ninto Request object
+HTTP -> Server: returns Request
+Server -> Dispatcher: gives Request
+Dispatcher -> Handler: finds appropriate Handler.\ntransmits Request
+Handler -> Handler: processes Request
+Handler -> Dispatcher: returns an object
+Dispatcher -> Server: transmits object
+Server -> HTTP: gives object
+HTTP -> HTTP: formats object\ninto JSON string\nwraps in HTTP response
+HTTP -> Server: return HTTP response string
+Server -> Client: returns response message
 @enduml
