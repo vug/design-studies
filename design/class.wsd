@@ -1,10 +1,10 @@
 @startuml Classes
 skinparam shadowing false
 
-class HTTProtocol {
+class HTTPTransceiver {
  -user_agent
- +read_request()
- +respond()
+ +receive_request()
+ +transmit_response()
 }
 
 class Request {

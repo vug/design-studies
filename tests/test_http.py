@@ -1,15 +1,15 @@
 from typing import Any
-from httprotocol.http import HTTProtocol
+from httptransceiver.http import HTTPTransceiver
 
 # from http.request import Request
 
 
 class MockServer(object):
     def listen(self, http_request: str) -> str:
-        h = HTTProtocol(http_request)
-        request = h.get_request()
+        h = HTTPTransceiver(http_request)
+        request = h.receive_request()
         obj = self.handle(request)
-        response = h.make_response(obj)
+        response = h.transmit_response(obj)
         return response
 
     def handle(self, request) -> Any:

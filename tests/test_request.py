@@ -1,4 +1,4 @@
-from httprotocol.http import Request
+from httptransceiver.http import Request
 
 
 def test_params():

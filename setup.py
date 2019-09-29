@@ -1,3 +1,3 @@
 from distutils.core import setup
 
-setup(name="httprotocol", packages=["httprotocol"])
+setup(name="httptransceiver", packages=["httptransceiver"])
