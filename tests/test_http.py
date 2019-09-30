@@ -2,8 +2,6 @@ import pytest
 from typing import Any
 from httptransceiver.http import HTTPTransceiver, generate_lines
 
-# from http.request import Request
-
 
 class MockServer(object):
     def listen(self, http_request: str) -> str:
