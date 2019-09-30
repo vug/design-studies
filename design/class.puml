@@ -8,7 +8,7 @@ class HTTPTransceiver {
 }
 
 class Request {
-  -Dict[str, str] params
+  -Dict[str, str] parameters
   +getParameter(name: str) -> str
 }
 @enduml

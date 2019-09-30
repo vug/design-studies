@@ -1,0 +1,16 @@
+@startuml Use Case
+actor HTTPTransceiver
+usecase (receive message)
+usecase (parse HTTP)
+
+HTTPTransceiver -> (receive message)
+(receive message) .> (parse HTTP) : <<include>>
+(parse HTTP) .down.> (store Protocol Version) : <<include>>
+(parse HTTP) .right.> (build Request): <<include>>
+(parse HTTP) .right.> (parse parameters\nfrom header and body): <<include>>
+(parse HTTP) .up.> (parse user-agent): <<include>>
+(send response) <- HTTPTransceiver
+(send response) .left.> (format HTTP): <<include>>
+(format HTTP) .up.> (serialize response object): <<include>>
+(format HTTP) .down.> (build header and body): <<include>>
+@enduml
