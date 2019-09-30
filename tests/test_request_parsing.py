@@ -1,31 +1,18 @@
 import pytest
-from typing import Any
 from httptransceiver.http import HTTPTransceiver, generate_lines
 
 
-class MockServer(object):
-    def listen(self, http_request: str) -> str:
-        h = HTTPTransceiver(http_request)
-        request = h.receive_request()
-        obj = self.handle(request)
-        response = h.transmit_response(obj)
-        return response
-
-    def handle(self, request) -> Any:
-        return {"foo": "bar"}
-
-
 def test_line_iteration():
-    lines_gen = generate_lines("")
-    lines = list(lines_gen)
+    lines_iterator = generate_lines("")
+    lines = list(lines_iterator)
     assert lines == [""]
 
-    lines_gen = generate_lines("abc\nde")
-    lines = list(lines_gen)
+    lines_iterator = generate_lines("abc\nde")
+    lines = list(lines_iterator)
     assert lines == ["abc", "de"]
 
-    lines_gen = generate_lines("abc\n\nde")
-    lines = list(lines_gen)
+    lines_iterator = generate_lines("abc\n\nde")
+    lines = list(lines_iterator)
     assert lines == ["abc", "", "de"]
 
 

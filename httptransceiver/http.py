@@ -1,5 +1,6 @@
+from datetime import datetime
 import json
-from typing import Any, Dict, Generator
+from typing import Any, Dict, Generator, Optional
 
 from .request import Request
 
@@ -23,16 +24,37 @@ class HTTPTransceiver(object):
             version=self.version,
         )
 
-    def transmit_response(self, obj: Any) -> str:
-        # TODO: set http version, HTTP code
+    def transmit_response(
+        self,
+        status: str,
+        obj: Any,
+        version: Optional[str] = None,
+        date: Optional[str] = None,
+        server: Optional[str] = None,
+        content_type: Optional[str] = None,
+    ) -> str:
+        response_lines = []
+        if not version:
+            version = self.version
+        response_lines.append(f"{version} {status}")
         # (200 OK for success 500 for server error, 400 for bad input ?)
-        # TODO: add Date
-        # TODO: Server: MyServer
-        # TODO: Content-Type: application/json;charset=UTF-8
-        # TODO: Content-Lenght: length of string
-        # TODO: blank linke
-        # TODO: json_dumps(obj) (could be a non-serializable object)
-        return json.dumps(obj)
+        if not date:
+            date = datetime.now().strftime("%a, %d %b %Y %H:%M:%S")
+        response_lines.append(f"Date: {date}")
+        if not server:
+            server = "My Server"
+        response_lines.append(f"Server: {server}")
+        if not content_type:
+            content_type = "application/json;charset=UTF-8"
+        response_lines.append(f"Content-Type: {content_type}")
+        # assume server handling is correct and object is json serializable
+        body = json.dumps(obj)
+        content_length = len(body)
+        response_lines.append(f"Content-Length: {content_length}")
+        response_lines.append(f"")
+        response_lines.append(f"{body}")
+        response = "\n".join(response_lines)
+        return response
 
     def _parse_request(self) -> Request:
         self._parse_request_line()
