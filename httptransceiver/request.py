@@ -1,3 +1,4 @@
+import functools
 from urllib.parse import unquote
 from typing import Dict
 
@@ -17,10 +18,12 @@ class Request(object):
         self._headers = headers
         self.version = version
 
+    @functools.lru_cache()
     def get_parameter(self, key: str) -> str:
         value = self._parameters[key]
         return unquote(value)
 
+    @functools.lru_cache()
     def get_parameter_int(self, key: str) -> int:
         value = self.get_parameter(key)
         try:
