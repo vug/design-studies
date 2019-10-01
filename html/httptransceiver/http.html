@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.0" />
+<title>httptransceiver.http API documentation</title>
+<meta name="description" content="Module for HTTP message parsing and construction." />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>httptransceiver.http</code></h1>
+</header>
+<section id="section-intro">
+<p>Module for HTTP message parsing and construction.</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;Module for HTTP message parsing and construction.&#34;&#34;&#34;
+import json
+from datetime import datetime
+from typing import Any, Dict, Generator, Optional
+
+from .request import Request
+
+
+class HTTPTransceiver(object):
+    &#34;&#34;&#34;A class to help with parsing HTTP requests and constructing HTTP responses.
+
+    HTTPTransceiver is meant to be instantiated by a Web server each time an
+    HTTP request arrives. It parses HTTP messages into Request objects.
+    Also it can be used in constructing an HTTP response from given
+    Python object.
+    &#34;&#34;&#34;
+
+    METHODS = [&#34;GET&#34;, &#34;POST&#34;, &#34;PUT&#34;, &#34;DELETE&#34;]
+    &#34;&#34;&#34;List of accepted HTTP methods.&#34;&#34;&#34;
+
+    VERSIONS = [&#34;HTTP/0.9&#34;, &#34;HTTP/1.0&#34;, &#34;HTTP/1.1&#34;, &#34;HTTP/2.0&#34;, &#34;HTTP/3.0&#34;]
+    &#34;&#34;&#34;List of accepted HTTP versions.&#34;&#34;&#34;
+
+    def __init__(self, request_message: str):
+        &#34;&#34;&#34;Init an HTTPTransceiver object.
+
+        - `request_message` HTTP request message as string.
+        &#34;&#34;&#34;
+        self.lines_iterator = generate_lines(request_message)
+        self.parameters: Dict[str, str] = {}
+        self.headers: Dict[str, str] = {}
+        self._parse_request()
+
+    def receive_request(self) -&gt; Request:
+        &#34;&#34;&#34;Construct a Request object from the parsed HTTP request.&#34;&#34;&#34;
+        return Request(
+            method=self.method,
+            url=self.url,
+            parameters=self.parameters,
+            headers=self.headers,
+            version=self.version,
+        )
+
+    def transmit_response(
+        self,
+        status: str,
+        obj: Any,
+        version: Optional[str] = None,
+        date: Optional[str] = None,
+        server: Optional[str] = None,
+        content_type: Optional[str] = None,
+    ) -&gt; str:
+        &#34;&#34;&#34;Construct HTTP response in text format.
+
+        - `status` HTTP status {200, 400, 500} etc.
+        - `obj` JSON serializable Python object. It&#39;ll be formatted into JSON
+        and placed in HTTP response body.
+        - `version` HTTP version. If not provided the version of the request
+        is used.
+        - `date` Response time. If not provided current time is used.
+        - `server` The name of the responding server. If not provided
+        set as &#34;My Server&#34;.
+        - `content_type` The type of response content. If not provided
+        set as &#34;application/json;charset=UTF-8&#34;.
+        &#34;&#34;&#34;
+        response_lines = []
+        if not version:
+            version = self.version
+        response_lines.append(f&#34;{version} {status}&#34;)
+        if not date:
+            date = datetime.now().strftime(&#34;%a, %d %b %Y %H:%M:%S&#34;)
+        response_lines.append(f&#34;Date: {date}&#34;)
+        if not server:
+            server = &#34;My Server&#34;
+        response_lines.append(f&#34;Server: {server}&#34;)
+        if not content_type:
+            content_type = &#34;application/json;charset=UTF-8&#34;
+        response_lines.append(f&#34;Content-Type: {content_type}&#34;)
+        # Assume server handling is correct and object is json serializable
+        body = json.dumps(obj)
+        content_length = len(body)
+        response_lines.append(f&#34;Content-Length: {content_length}&#34;)
+        response_lines.append(f&#34;&#34;)
+        response_lines.append(f&#34;{body}&#34;)
+        response = &#34;\n&#34;.join(response_lines)
+        return response
+
+    def _parse_request(self) -&gt; Request:
+        self._parse_request_line()
+        self._parse_headers()
+        self._parse_message_body()
+
+    def _parse_request_line(self) -&gt; None:
+        line = next(self.lines_iterator)
+        sections = line.split(&#34; &#34;)
+        if len(sections) != 3:
+            raise ValueError(f&#34;Bad request line: {line}.&#34;)
+        method = sections[0]
+        if method not in self.METHODS:
+            raise ValueError(f&#34;Bad HTTP method: {method}.&#34;)
+        self.method = method
+        self._parse_request_target(sections[1])
+        version = sections[2]
+        if version not in self.VERSIONS:
+            raise ValueError(f&#34;Bad HTTP version: {version}.&#34;)
+        self.version = version
+
+    def _parse_request_target(self, request_target: str) -&gt; None:
+        sections = request_target.split(&#34;?&#34;)
+        self.url = sections[0]
+        if len(sections) &lt; 2:
+            return
+        self._parse_parameters(sections[1])
+
+    def _parse_headers(self):
+        while True:
+            try:
+                line = next(self.lines_iterator)
+            except StopIteration:
+                raise ValueError(f&#34;Missing blank line after headers.&#34;)
+            if line == &#34;&#34;:
+                return
+            try:
+                key, value = line.split(&#34;: &#34;)
+            except ValueError:
+                raise ValueError(f&#34;Bad header field {line}.&#34;)
+            self.headers[key] = value
+
+    def _parse_message_body(self):
+        try:
+            line = next(self.lines_iterator)
+        except StopIteration:
+            raise ValueError(f&#34;Missing blank line after headers.&#34;)
+        if not line:
+            return
+        self._parse_parameters(line)
+
+    def _parse_parameters(self, queries: str) -&gt; None:
+        for query in queries.split(&#34;&amp;&#34;):
+            try:
+                key, value = query.split(&#34;=&#34;)
+            except ValueError:
+                raise ValueError(f&#34;Bad query {query}.&#34;)
+            self.parameters[key] = value
+
+
+def generate_lines(text: str) -&gt; Generator[str, None, None]:
+    &#34;&#34;&#34;Generate a stream of lines from given text.
+
+    - `text` input string to be converted to a stream.
+    &#34;&#34;&#34;
+    line_start_index = 0
+    while True:
+        line_end_index = text.find(&#34;\n&#34;, line_start_index)
+        if line_end_index == -1:
+            break
+        yield text[line_start_index:line_end_index]
+        line_start_index = line_end_index + 1
+    yield text[line_start_index:]</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="httptransceiver.http.generate_lines"><code class="name flex">
+<span>def <span class="ident">generate_lines</span></span>(<span>text)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Generate a stream of lines from given text.</p>
+<ul>
+<li><code>text</code> input string to be converted to a stream.</li>
+</ul></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_lines(text: str) -&gt; Generator[str, None, None]:
+    &#34;&#34;&#34;Generate a stream of lines from given text.
+
+    - `text` input string to be converted to a stream.
+    &#34;&#34;&#34;
+    line_start_index = 0
+    while True:
+        line_end_index = text.find(&#34;\n&#34;, line_start_index)
+        if line_end_index == -1:
+            break
+        yield text[line_start_index:line_end_index]
+        line_start_index = line_end_index + 1
+    yield text[line_start_index:]</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="httptransceiver.http.HTTPTransceiver"><code class="flex name class">
+<span>class <span class="ident">HTTPTransceiver</span></span>
+<span>(</span><span>request_message)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>A class to help with parsing HTTP requests and constructing HTTP responses.</p>
+<p>HTTPTransceiver is meant to be instantiated by a Web server each time an
+HTTP request arrives. It parses HTTP messages into Request objects.
+Also it can be used in constructing an HTTP response from given
+Python object.</p>
+<p>Init an HTTPTransceiver object.</p>
+<ul>
+<li><code>request_message</code> HTTP request message as string.</li>
+</ul></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class HTTPTransceiver(object):
+    &#34;&#34;&#34;A class to help with parsing HTTP requests and constructing HTTP responses.
+
+    HTTPTransceiver is meant to be instantiated by a Web server each time an
+    HTTP request arrives. It parses HTTP messages into Request objects.
+    Also it can be used in constructing an HTTP response from given
+    Python object.
+    &#34;&#34;&#34;
+
+    METHODS = [&#34;GET&#34;, &#34;POST&#34;, &#34;PUT&#34;, &#34;DELETE&#34;]
+    &#34;&#34;&#34;List of accepted HTTP methods.&#34;&#34;&#34;
+
+    VERSIONS = [&#34;HTTP/0.9&#34;, &#34;HTTP/1.0&#34;, &#34;HTTP/1.1&#34;, &#34;HTTP/2.0&#34;, &#34;HTTP/3.0&#34;]
+    &#34;&#34;&#34;List of accepted HTTP versions.&#34;&#34;&#34;
+
+    def __init__(self, request_message: str):
+        &#34;&#34;&#34;Init an HTTPTransceiver object.
+
+        - `request_message` HTTP request message as string.
+        &#34;&#34;&#34;
+        self.lines_iterator = generate_lines(request_message)
+        self.parameters: Dict[str, str] = {}
+        self.headers: Dict[str, str] = {}
+        self._parse_request()
+
+    def receive_request(self) -&gt; Request:
+        &#34;&#34;&#34;Construct a Request object from the parsed HTTP request.&#34;&#34;&#34;
+        return Request(
+            method=self.method,
+            url=self.url,
+            parameters=self.parameters,
+            headers=self.headers,
+            version=self.version,
+        )
+
+    def transmit_response(
+        self,
+        status: str,
+        obj: Any,
+        version: Optional[str] = None,
+        date: Optional[str] = None,
+        server: Optional[str] = None,
+        content_type: Optional[str] = None,
+    ) -&gt; str:
+        &#34;&#34;&#34;Construct HTTP response in text format.
+
+        - `status` HTTP status {200, 400, 500} etc.
+        - `obj` JSON serializable Python object. It&#39;ll be formatted into JSON
+        and placed in HTTP response body.
+        - `version` HTTP version. If not provided the version of the request
+        is used.
+        - `date` Response time. If not provided current time is used.
+        - `server` The name of the responding server. If not provided
+        set as &#34;My Server&#34;.
+        - `content_type` The type of response content. If not provided
+        set as &#34;application/json;charset=UTF-8&#34;.
+        &#34;&#34;&#34;
+        response_lines = []
+        if not version:
+            version = self.version
+        response_lines.append(f&#34;{version} {status}&#34;)
+        if not date:
+            date = datetime.now().strftime(&#34;%a, %d %b %Y %H:%M:%S&#34;)
+        response_lines.append(f&#34;Date: {date}&#34;)
+        if not server:
+            server = &#34;My Server&#34;
+        response_lines.append(f&#34;Server: {server}&#34;)
+        if not content_type:
+            content_type = &#34;application/json;charset=UTF-8&#34;
+        response_lines.append(f&#34;Content-Type: {content_type}&#34;)
+        # Assume server handling is correct and object is json serializable
+        body = json.dumps(obj)
+        content_length = len(body)
+        response_lines.append(f&#34;Content-Length: {content_length}&#34;)
+        response_lines.append(f&#34;&#34;)
+        response_lines.append(f&#34;{body}&#34;)
+        response = &#34;\n&#34;.join(response_lines)
+        return response
+
+    def _parse_request(self) -&gt; Request:
+        self._parse_request_line()
+        self._parse_headers()
+        self._parse_message_body()
+
+    def _parse_request_line(self) -&gt; None:
+        line = next(self.lines_iterator)
+        sections = line.split(&#34; &#34;)
+        if len(sections) != 3:
+            raise ValueError(f&#34;Bad request line: {line}.&#34;)
+        method = sections[0]
+        if method not in self.METHODS:
+            raise ValueError(f&#34;Bad HTTP method: {method}.&#34;)
+        self.method = method
+        self._parse_request_target(sections[1])
+        version = sections[2]
+        if version not in self.VERSIONS:
+            raise ValueError(f&#34;Bad HTTP version: {version}.&#34;)
+        self.version = version
+
+    def _parse_request_target(self, request_target: str) -&gt; None:
+        sections = request_target.split(&#34;?&#34;)
+        self.url = sections[0]
+        if len(sections) &lt; 2:
+            return
+        self._parse_parameters(sections[1])
+
+    def _parse_headers(self):
+        while True:
+            try:
+                line = next(self.lines_iterator)
+            except StopIteration:
+                raise ValueError(f&#34;Missing blank line after headers.&#34;)
+            if line == &#34;&#34;:
+                return
+            try:
+                key, value = line.split(&#34;: &#34;)
+            except ValueError:
+                raise ValueError(f&#34;Bad header field {line}.&#34;)
+            self.headers[key] = value
+
+    def _parse_message_body(self):
+        try:
+            line = next(self.lines_iterator)
+        except StopIteration:
+            raise ValueError(f&#34;Missing blank line after headers.&#34;)
+        if not line:
+            return
+        self._parse_parameters(line)
+
+    def _parse_parameters(self, queries: str) -&gt; None:
+        for query in queries.split(&#34;&amp;&#34;):
+            try:
+                key, value = query.split(&#34;=&#34;)
+            except ValueError:
+                raise ValueError(f&#34;Bad query {query}.&#34;)
+            self.parameters[key] = value</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="httptransceiver.http.HTTPTransceiver.METHODS"><code class="name">var <span class="ident">METHODS</span></code></dt>
+<dd>
+<section class="desc"><p>List of accepted HTTP methods.</p></section>
+</dd>
+<dt id="httptransceiver.http.HTTPTransceiver.VERSIONS"><code class="name">var <span class="ident">VERSIONS</span></code></dt>
+<dd>
+<section class="desc"><p>List of accepted HTTP versions.</p></section>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="httptransceiver.http.HTTPTransceiver.receive_request"><code class="name flex">
+<span>def <span class="ident">receive_request</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Construct a Request object from the parsed HTTP request.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def receive_request(self) -&gt; Request:
+    &#34;&#34;&#34;Construct a Request object from the parsed HTTP request.&#34;&#34;&#34;
+    return Request(
+        method=self.method,
+        url=self.url,
+        parameters=self.parameters,
+        headers=self.headers,
+        version=self.version,
+    )</code></pre>
+</details>
+</dd>
+<dt id="httptransceiver.http.HTTPTransceiver.transmit_response"><code class="name flex">
+<span>def <span class="ident">transmit_response</span></span>(<span>self, status, obj, version=None, date=None, server=None, content_type=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Construct HTTP response in text format.</p>
+<ul>
+<li><code>status</code> HTTP status {200, 400, 500} etc.</li>
+<li><code>obj</code> JSON serializable Python object. It'll be formatted into JSON
+and placed in HTTP response body.</li>
+<li><code>version</code> HTTP version. If not provided the version of the request
+is used.</li>
+<li><code>date</code> Response time. If not provided current time is used.</li>
+<li><code>server</code> The name of the responding server. If not provided
+set as "My Server".</li>
+<li><code>content_type</code> The type of response content. If not provided
+set as "application/json;charset=UTF-8".</li>
+</ul></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def transmit_response(
+    self,
+    status: str,
+    obj: Any,
+    version: Optional[str] = None,
+    date: Optional[str] = None,
+    server: Optional[str] = None,
+    content_type: Optional[str] = None,
+) -&gt; str:
+    &#34;&#34;&#34;Construct HTTP response in text format.
+
+    - `status` HTTP status {200, 400, 500} etc.
+    - `obj` JSON serializable Python object. It&#39;ll be formatted into JSON
+    and placed in HTTP response body.
+    - `version` HTTP version. If not provided the version of the request
+    is used.
+    - `date` Response time. If not provided current time is used.
+    - `server` The name of the responding server. If not provided
+    set as &#34;My Server&#34;.
+    - `content_type` The type of response content. If not provided
+    set as &#34;application/json;charset=UTF-8&#34;.
+    &#34;&#34;&#34;
+    response_lines = []
+    if not version:
+        version = self.version
+    response_lines.append(f&#34;{version} {status}&#34;)
+    if not date:
+        date = datetime.now().strftime(&#34;%a, %d %b %Y %H:%M:%S&#34;)
+    response_lines.append(f&#34;Date: {date}&#34;)
+    if not server:
+        server = &#34;My Server&#34;
+    response_lines.append(f&#34;Server: {server}&#34;)
+    if not content_type:
+        content_type = &#34;application/json;charset=UTF-8&#34;
+    response_lines.append(f&#34;Content-Type: {content_type}&#34;)
+    # Assume server handling is correct and object is json serializable
+    body = json.dumps(obj)
+    content_length = len(body)
+    response_lines.append(f&#34;Content-Length: {content_length}&#34;)
+    response_lines.append(f&#34;&#34;)
+    response_lines.append(f&#34;{body}&#34;)
+    response = &#34;\n&#34;.join(response_lines)
+    return response</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="httptransceiver" href="index.html">httptransceiver</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="httptransceiver.http.generate_lines" href="#httptransceiver.http.generate_lines">generate_lines</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="httptransceiver.http.HTTPTransceiver" href="#httptransceiver.http.HTTPTransceiver">HTTPTransceiver</a></code></h4>
+<ul class="">
+<li><code><a title="httptransceiver.http.HTTPTransceiver.METHODS" href="#httptransceiver.http.HTTPTransceiver.METHODS">METHODS</a></code></li>
+<li><code><a title="httptransceiver.http.HTTPTransceiver.VERSIONS" href="#httptransceiver.http.HTTPTransceiver.VERSIONS">VERSIONS</a></code></li>
+<li><code><a title="httptransceiver.http.HTTPTransceiver.receive_request" href="#httptransceiver.http.HTTPTransceiver.receive_request">receive_request</a></code></li>
+<li><code><a title="httptransceiver.http.HTTPTransceiver.transmit_response" href="#httptransceiver.http.HTTPTransceiver.transmit_response">transmit_response</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.0</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

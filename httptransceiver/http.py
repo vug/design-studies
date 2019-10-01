@@ -16,12 +16,15 @@ class HTTPTransceiver(object):
     """
 
     METHODS = ["GET", "POST", "PUT", "DELETE"]
+    """List of accepted HTTP methods."""
+
     VERSIONS = ["HTTP/0.9", "HTTP/1.0", "HTTP/1.1", "HTTP/2.0", "HTTP/3.0"]
+    """List of accepted HTTP versions."""
 
     def __init__(self, request_message: str):
         """Init an HTTPTransceiver object.
 
-        request_message: HTTP request message as string.
+        - `request_message` HTTP request message as string.
         """
         self.lines_iterator = generate_lines(request_message)
         self.parameters: Dict[str, str] = {}
@@ -29,7 +32,7 @@ class HTTPTransceiver(object):
         self._parse_request()
 
     def receive_request(self) -> Request:
-        """Construct a Request object."""
+        """Construct a Request object from the parsed HTTP request."""
         return Request(
             method=self.method,
             url=self.url,
@@ -49,15 +52,15 @@ class HTTPTransceiver(object):
     ) -> str:
         """Construct HTTP response in text format.
 
-        status: HTTP status {200, 400, 500} etc.
-        obj: JSON serializable Python object. It'll be formatted into JSON
+        - `status` HTTP status {200, 400, 500} etc.
+        - `obj` JSON serializable Python object. It'll be formatted into JSON
         and placed in HTTP response body.
-        version: HTTP version. If not provided the version of the request
+        - `version` HTTP version. If not provided the version of the request
         is used.
-        date: Response time. If not provided current time is used.
-        server: The name of the responding server. If not provided
+        - `date` Response time. If not provided current time is used.
+        - `server` The name of the responding server. If not provided
         set as "My Server".
-        content_type: The type of response content. If not provided
+        - `content_type` The type of response content. If not provided
         set as "application/json;charset=UTF-8".
         """
         response_lines = []
@@ -142,7 +145,10 @@ class HTTPTransceiver(object):
 
 
 def generate_lines(text: str) -> Generator[str, None, None]:
-    """Generate a stream of lines from given text."""
+    """Generate a stream of lines from given text.
+
+    - `text` input string to be converted to a stream.
+    """
     line_start_index = 0
     while True:
         line_end_index = text.find("\n", line_start_index)

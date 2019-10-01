@@ -10,6 +10,7 @@ flake8 = "*"
 pytest = "==5.0.1"
 pydocstyle = "*"
 rope = "*"
+pdoc3 = "*"
 
 [packages]
 httptransceiver = {editable = true,path = "."}

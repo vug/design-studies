@@ -20,11 +20,11 @@ class Request(object):
     ):
         """Init a Request object.
 
-        method: HTTP method {GET, PUT} etc.
-        url: URL requested
-        parameters: query parameters from URL and message body.
-        headers: HTTP headers such as Content-Type, User-Agent.
-        version: HTTP version {HTTP/1.1, HTTP/2.0} etc.
+        - `method` HTTP method {GET, PUT} etc.
+        - `url` URL requested
+        - `parameters` query parameters from URL and message body.
+        - `headers` HTTP headers such as Content-Type, User-Agent.
+        - `version` HTTP version {HTTP/1.1, HTTP/2.0} etc.
         """
         self.method = method
         self.url = url
@@ -36,7 +36,7 @@ class Request(object):
     def get_parameter(self, key: str) -> str:
         """Get parameter after URL decoding. (Memoized).
 
-        key: parameter name.
+        - `key` parameter name.
         """
         value = self._parameters[key]
         return unquote(value)
@@ -45,7 +45,7 @@ class Request(object):
     def get_parameter_int(self, key: str) -> int:
         """Get parameter after URL decoding and casting to int. (Memoized).
 
-        key: parameter name.
+        - `key` parameter name.
         """
         value = self.get_parameter(key)
         try:
@@ -57,6 +57,6 @@ class Request(object):
     def get_header(self, key: str) -> str:
         """Get HTTP header for given key.
 
-        key: header name.
+        - `key` header name.
         """
         return self._headers[key]
