@@ -1,6 +1,6 @@
 import functools
-from urllib.parse import unquote
 from typing import Dict
+from urllib.parse import unquote
 
 
 class Request(object):

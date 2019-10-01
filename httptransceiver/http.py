@@ -1,6 +1,6 @@
 """Module for HTTP message parsing and construction."""
-from datetime import datetime
 import json
+from datetime import datetime
 from typing import Any, Dict, Generator, Optional
 
 from .request import Request
