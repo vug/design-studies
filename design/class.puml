@@ -2,13 +2,17 @@
 skinparam shadowing false
 
 class HTTPTransceiver {
- -user_agent
+ -version
  +receive_request()
  +transmit_response()
 }
 
 class Request {
-  -Dict[str, str] parameters
-  +getParameter(name: str) -> str
+  +str method
+  +str url
+  +str version
+  +get_parameter(key: str) -> str
+  +get_parameter_int(key: str) -> int
+  +get_header(key: str) -> str
 }
 @enduml
