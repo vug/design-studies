@@ -8,6 +8,7 @@ black = "*"
 mypy = "*"
 flake8 = "*"
 pytest = "==5.0.1"
+pydocstyle = "*"
 
 [packages]
 httptransceiver = {editable = true,path = "."}
