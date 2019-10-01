@@ -1,3 +1,4 @@
+"""Module for HTTP message parsing and construction."""
 from datetime import datetime
 import json
 from typing import Any, Dict, Generator, Optional
@@ -6,16 +7,26 @@ from .request import Request
 
 
 class HTTPTransceiver(object):
+    """A class to help with parsing HTTP requests and constructing HTTP responses.
+
+    HTTPTransceiver is meant to be instantiated by a Web server each time an
+    HTTP request arrives. It parses HTTP messages into Request objects.
+    Also it can be used in constructing an HTTP response from given
+    Python object.
+    """
+
     METHODS = ["GET", "POST", "PUT", "DELETE"]
     VERSIONS = ["HTTP/0.9", "HTTP/1.0", "HTTP/1.1", "HTTP/2.0", "HTTP/3.0"]
 
     def __init__(self, request_message: str):
+        """request_message: HTTP request message as string."""
         self.lines_iterator = generate_lines(request_message)
         self.parameters: Dict[str, str] = {}
         self.headers: Dict[str, str] = {}
         self._parse_request()
 
     def receive_request(self) -> Request:
+        """Construct a Request object."""
         return Request(
             method=self.method,
             url=self.url,
@@ -33,11 +44,23 @@ class HTTPTransceiver(object):
         server: Optional[str] = None,
         content_type: Optional[str] = None,
     ) -> str:
+        """Construct HTTP response in text format.
+
+        status: HTTP status {200, 400, 500} etc.
+        obj: JSON serializable Python object. It'll be formatted into JSON
+        and placed in HTTP response body.
+        version: HTTP version. If not provided the version of the request
+        is used.
+        date: Response time. If not provided current time is used.
+        server: The name of the responding server. If not provided
+        set as "My Server".
+        content_type: The type of response content. If not provided
+        set as "application/json;charset=UTF-8".
+        """
         response_lines = []
         if not version:
             version = self.version
         response_lines.append(f"{version} {status}")
-        # (200 OK for success 500 for server error, 400 for bad input ?)
         if not date:
             date = datetime.now().strftime("%a, %d %b %Y %H:%M:%S")
         response_lines.append(f"Date: {date}")
@@ -47,7 +70,7 @@ class HTTPTransceiver(object):
         if not content_type:
             content_type = "application/json;charset=UTF-8"
         response_lines.append(f"Content-Type: {content_type}")
-        # assume server handling is correct and object is json serializable
+        # Assume server handling is correct and object is json serializable
         body = json.dumps(obj)
         content_length = len(body)
         response_lines.append(f"Content-Length: {content_length}")
@@ -116,6 +139,7 @@ class HTTPTransceiver(object):
 
 
 def generate_lines(text: str) -> Generator[str, None, None]:
+    """Generate a stream of lines from given text."""
     line_start_index = 0
     while True:
         line_end_index = text.find("\n", line_start_index)
