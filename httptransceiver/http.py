@@ -19,7 +19,10 @@ class HTTPTransceiver(object):
     VERSIONS = ["HTTP/0.9", "HTTP/1.0", "HTTP/1.1", "HTTP/2.0", "HTTP/3.0"]
 
     def __init__(self, request_message: str):
-        """request_message: HTTP request message as string."""
+        """Init an HTTPTransceiver object.
+
+        request_message: HTTP request message as string.
+        """
         self.lines_iterator = generate_lines(request_message)
         self.parameters: Dict[str, str] = {}
         self.headers: Dict[str, str] = {}
