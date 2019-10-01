@@ -9,6 +9,7 @@ mypy = "*"
 flake8 = "*"
 pytest = "==5.0.1"
 pydocstyle = "*"
+rope = "*"
 
 [packages]
 httptransceiver = {editable = true,path = "."}
